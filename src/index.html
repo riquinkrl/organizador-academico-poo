@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flow Academy</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="64x64" href="ui/img/favicon.png" />
+  
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Configuração Inline (Garante que o Parcel não isole o escopo e o darkMode funcione) -->
+  <script>
+    tailwind.config = {
+      darkMode: 'class', // Habilita o modo escuro via classe 'dark'
+      theme: {
+        extend: {
+          colors: {
+            marinho: '#0001E8',
+            primario: '#0001E8',
+            claro: 'rgba(0,1,232,0.06)',
+            app: '#FFFFFF'
+          },
+          fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'] }
+        }
+      }
+    };
+  </script>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Estilos customizados -->
+  <link rel="stylesheet" href="ui/style.css" />
+</head>
+
+<body class="bg-app text-primario dark:bg-slate-900 dark:text-slate-200 font-sans antialiased min-h-screen selection:bg-primario/20 dark:selection:bg-indigo-500/30 transition-colors duration-300">
+
+  <!-- CABEÇALHO SUPERIOR -->
+  <header id="app-header" class="sticky top-0 z-40 bg-marinho dark:bg-slate-950 text-white shadow-md transition-colors duration-300">
+    <div class="flex items-center justify-between gap-3 px-4 h-16">
+      <div class="flex items-center gap-3">
+        <button id="btn-toggle-sidebar" class="lg:hidden p-2 rounded-lg hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-white outline-none" aria-label="Abrir menu">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+        </button>
+        <a href="#" id="logo" class="flex items-center gap-3 focus-visible:ring-2 focus-visible:ring-white outline-none rounded-xl" data-nav="dashboard">
+          <span id="logo-box" class="grid place-items-center h-12 px-2 rounded-xl bg-white shadow-sm">
+            <img src="ui/img/favicon.png" alt="Flow Academy" class="h-10 w-auto" />
+          </span>
+          <span class="text-lg font-bold tracking-tight">Flow Academy</span>
+        </a>
+      </div>
+      
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- BUSCA GERAL -->
+        <button id="btn-busca-global" class="flex items-center gap-2 bg-white/10 hover:bg-white/20 rounded-xl px-3 py-2 text-sm focus-visible:ring-2 focus-visible:ring-white outline-none">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <span class="hidden sm:inline text-white/80">Busca rápida…</span>
+          <kbd class="hidden md:inline text-xs bg-white/15 rounded px-1.5 py-0.5 border border-white/20">Ctrl K</kbd>
+        </button>
+
+        <!-- BOTÃO DE ALTERNAR TEMA (DARK/LIGHT) -->
+        <button id="btn-theme-toggle" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white focus-visible:ring-2 focus-visible:ring-white outline-none transition-colors" aria-label="Alternar tema">
+          <!-- Ícone Sol -->
+          <svg class="w-5 h-5 hidden dark:block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+          <!-- Ícone Lua -->
+          <svg class="w-5 h-5 block dark:hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        </button>
+
+        <!-- PERFIL -->
+        <span id="perfil-tag" class="flex items-center gap-2 bg-white dark:bg-slate-800 text-primario dark:text-indigo-300 text-xs sm:text-sm font-semibold rounded-full px-3 py-1.5 shadow-sm transition-colors">
+          <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg>
+          Estudante - ADS
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <div class="flex">
+    <!-- overlay mobile -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-primario/40 dark:bg-black/60 backdrop-blur-sm z-30 hidden lg:hidden transition-opacity"></div>
+
+    <!-- MENU LATERAL -->
+    <aside id="sidebar" class="fixed lg:sticky top-16 left-0 z-30 h-[calc(100vh-4rem)] w-72 shrink-0 bg-white dark:bg-slate-900 border-r border-primario/20 dark:border-slate-800 overflow-y-auto -translate-x-full lg:translate-x-0 transition-all duration-300 ease-in-out">
+      <nav class="p-4 space-y-6">
+        <div>
+          <a href="#" class="nav-link active flex items-center gap-3 px-3 py-2.5 rounded-xl text-primario dark:text-indigo-300 hover:bg-claro dark:hover:bg-slate-800/80 focus-visible:ring-2 focus-visible:ring-primario outline-none transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+            Dashboard Geral
+          </a>
+        </div>
+
+        <div>
+          <p class="px-3 mb-2 text-xs font-semibold uppercase tracking-wider text-primario/60 dark:text-slate-400">Workspaces (Disciplinas)</p>
+          <ul class="space-y-1">
+            <li>
+              <a href="#" class="nav-link flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl text-primario dark:text-indigo-300 hover:bg-claro dark:hover:bg-slate-800/80 focus-visible:ring-2 focus-visible:ring-primario outline-none transition-colors">
+                <span class="flex items-center gap-3"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/></svg> POO</span>
+                <span data-tooltip="Pendentes" class="tooltip-css text-xs bg-claro dark:bg-slate-800 text-marinho dark:text-indigo-300 rounded-full px-2 py-0.5 font-semibold">3</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="nav-link flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl text-primario dark:text-indigo-300 hover:bg-claro dark:hover:bg-slate-800/80 focus-visible:ring-2 focus-visible:ring-primario outline-none transition-colors">
+                <span class="flex items-center gap-3"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></svg> Banco de Dados 1</span>
+                <span data-tooltip="Pendentes" class="tooltip-css text-xs bg-claro dark:bg-slate-800 text-marinho dark:text-indigo-300 rounded-full px-2 py-0.5 font-semibold">2</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="nav-link flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl text-primario dark:text-indigo-300 hover:bg-claro dark:hover:bg-slate-800/80 focus-visible:ring-2 focus-visible:ring-primario outline-none transition-colors">
+                <span class="flex items-center gap-3"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M6 21a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M18 21a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M6 15v-1a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v1"/></svg> Eng. de Software</span>
+                <span data-tooltip="Pendentes" class="tooltip-css text-xs bg-claro dark:bg-slate-800 text-marinho dark:text-indigo-300 rounded-full px-2 py-0.5 font-semibold">1</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="nav-link flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl text-primario dark:text-indigo-300 hover:bg-claro dark:hover:bg-slate-800/80 focus-visible:ring-2 focus-visible:ring-primario outline-none transition-colors">
+                <span class="flex items-center gap-3"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></svg> Sis. Operacionais</span>
+                <span data-tooltip="Possui tarefas em atraso!" class="tooltip-css text-xs bg-primario dark:bg-red-500/20 dark:text-red-400 text-white shadow-sm rounded-full px-2 py-0.5 font-semibold animate-pulse">2</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <button class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border-2 border-dashed border-primario/40 dark:border-slate-700 text-primario dark:text-indigo-400 font-semibold hover:bg-claro dark:hover:bg-slate-800/50 focus-visible:ring-2 focus-visible:ring-primario outline-none transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> 
+          Nova Disciplina
+        </button>
+      </nav>
+    </aside>
+
+    <!-- ÁREA DE CONTEÚDO PRINCIPAL -->
+    <main class="flex-1 min-w-0 p-4 sm:p-6 lg:p-8 overflow-x-hidden">
+      <!-- DASHBOARD GERAL -->
+      <section class="space-y-8">
+        <div>
+          <h1 class="text-2xl sm:text-3xl font-bold text-marinho dark:text-white tracking-tight">Dashboard Geral</h1>
+          <p class="text-primario/80 dark:text-slate-400 mt-1">Visão consolidada da sua vida acadêmica.</p>
+        </div>
+
+        <!-- Cards de métricas -->
+        <div class="grid grid-cols-2 xl:grid-cols-4 gap-4">
+          <article class="metric-card bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-primario/20 dark:border-slate-700 p-5 cursor-default hover:border-primario/40 dark:hover:border-indigo-500/50 transition-colors" tabindex="0">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-medium text-primario/80 dark:text-slate-400">Atividades Concluídas</span>
+              <span class="metric-icon grid place-items-center w-11 h-11 rounded-xl bg-claro dark:bg-slate-700/50 text-primario dark:text-indigo-400"><svg class="ai ai-check w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path class="ai-draw" pathLength="1" d="m9 12 2 2 4-4"/></svg></span>
+            </div>
+            <p class="mt-3 text-3xl font-bold text-marinho dark:text-white">12</p>
+          </article>
+          
+          <article class="metric-card bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-primario/20 dark:border-slate-700 p-5 cursor-default hover:border-primario/40 dark:hover:border-indigo-500/50 transition-colors" tabindex="0">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-medium text-primario/80 dark:text-slate-400">Atividades Pendentes</span>
+              <span class="metric-icon grid place-items-center w-11 h-11 rounded-xl bg-claro dark:bg-slate-700/50 text-primario dark:text-indigo-400"><svg class="ai ai-clock w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path class="ai-min" d="M12 12V6"/><path class="ai-hour" d="m12 12 4 2"/></svg></span>
+            </div>
+            <p class="mt-3 text-3xl font-bold text-marinho dark:text-white">8</p>
+          </article>
+
+          <article class="metric-card bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-primario/40 dark:border-red-900/50 p-5 cursor-default hover:border-primario dark:hover:border-red-500/50 transition-colors relative overflow-hidden" tabindex="0">
+            <div class="absolute top-0 right-0 w-16 h-16 bg-red-500/10 dark:bg-red-500/5 rounded-bl-full -z-10"></div>
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-medium text-primario/80 dark:text-slate-400">Tarefas em Atraso</span>
+              <span class="metric-icon grid place-items-center w-11 h-11 rounded-xl bg-red-50 dark:bg-red-500/10 text-red-500 dark:text-red-400"><svg class="ai ai-alert w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><g class="ai-tri"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path class="ai-dot" d="M12 17h.01"/></g></svg></span>
+            </div>
+            <p class="mt-3 text-3xl font-bold text-red-600 dark:text-red-400">2</p>
+          </article>
+
+          <article class="metric-card bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-primario/20 dark:border-slate-700 p-5 cursor-default hover:border-primario/40 dark:hover:border-indigo-500/50 transition-colors" tabindex="0">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-medium text-primario/80 dark:text-slate-400">Lembretes Fixados</span>
+              <span class="metric-icon grid place-items-center w-11 h-11 rounded-xl bg-claro dark:bg-slate-700/50 text-primario dark:text-indigo-400"><svg class="ai ai-bell w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><g class="ai-bell-body"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/></g><path class="ai-clapper" d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></span>
+            </div>
+            <p class="mt-3 text-3xl font-bold text-marinho dark:text-white">9</p>
+          </article>
+        </div>
+
+        <!-- Seção de Workspace Exemplo (POO) -->
+        <header class="bg-primario dark:bg-slate-800 text-white rounded-2xl p-6 shadow-md relative overflow-hidden transition-colors">
+          <div class="absolute -top-24 -right-24 w-64 h-64 bg-white/5 dark:bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+          
+          <div class="flex flex-wrap items-start justify-between gap-6 relative z-10">
+            <div class="min-w-0 flex-1">
+              <p class="text-xs font-semibold uppercase tracking-wider text-white/70 dark:text-slate-400">Visualizando Disciplina</p>
+              <h1 class="text-2xl sm:text-3xl font-bold mt-1 tracking-tight">Programação Orientada a Objetos</h1>
+              <dl class="mt-5 grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-4 gap-3 text-sm">
+                <div class="bg-white/10 dark:bg-slate-900/50 rounded-xl px-4 py-3 border border-white/5 dark:border-white/5">
+                  <dt class="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-white/70 dark:text-slate-400">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="9" y2="9"/><line x1="4" x2="20" y1="15" y2="15"/><line x1="10" x2="8" y1="3" y2="21"/><line x1="16" x2="14" y1="3" y2="21"/></svg> Código</dt>
+                  <dd class="mt-1 font-semibold dark:text-slate-200">ADS0304</dd>
+                </div>
+                <div class="bg-white/10 dark:bg-slate-900/50 rounded-xl px-4 py-3 border border-white/5 dark:border-white/5">
+                  <dt class="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-white/70 dark:text-slate-400">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Professor</dt>
+                  <dd class="mt-1 font-semibold dark:text-slate-200">Prof. Iallen Gábio</dd>
+                </div>
+                <div class="bg-white/10 dark:bg-slate-900/50 rounded-xl px-4 py-3 border border-white/5 dark:border-white/5">
+                  <dt class="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-white/70 dark:text-slate-400">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg> Sala</dt>
+                  <dd class="mt-1 font-semibold dark:text-slate-200">Lab. 03</dd>
+                </div>
+                <div class="bg-white/10 dark:bg-slate-900/50 rounded-xl px-4 py-3 border border-white/5 dark:border-white/5">
+                  <dt class="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-white/70 dark:text-slate-400">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16.5 12"/></svg> Horário</dt>
+                  <dd class="mt-1 font-semibold text-[13px] dark:text-slate-200">Seg e Qua, 19:00 - 20:40</dd>
+                </div>
+              </dl>
+            </div>
+            
+            <div class="w-full lg:w-64 bg-white/10 dark:bg-slate-900/50 p-4 rounded-xl border border-white/5">
+              <div class="flex justify-between text-sm mb-2">
+                <span class="text-white/80 dark:text-slate-300 font-medium">Progresso</span>
+                <span class="font-bold dark:text-white">40%</span>
+              </div>
+              <div class="h-2.5 bg-black/20 dark:bg-black/40 rounded-full overflow-hidden" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">
+                <div class="h-full bg-white dark:bg-indigo-400 rounded-full transition-all duration-1000 ease-out" style="width:40%"></div>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <!-- BARRA DE CONTROLE -->
+        <div id="barra-controle" class="bg-white dark:bg-slate-800 rounded-2xl border border-primario/20 dark:border-slate-700 shadow-sm p-4 space-y-4 transition-colors">
+          <div class="flex flex-wrap items-center gap-2" id="filtros">
+            <button data-filtro="todas" class="filter-btn active px-4 py-2 rounded-xl border border-primario/20 dark:border-slate-600 text-sm font-medium hover:bg-claro dark:hover:bg-slate-700 outline-none focus-visible:ring-2 focus-visible:ring-primario transition-colors">Todas</button>
+            <button data-filtro="pendentes" class="filter-btn px-4 py-2 rounded-xl border border-primario/20 dark:border-slate-600 text-sm font-medium hover:bg-claro dark:hover:bg-slate-700 text-primario dark:text-slate-300 outline-none focus-visible:ring-2 focus-visible:ring-primario transition-colors">Pendentes</button>
+            <button data-filtro="concluidas" class="filter-btn px-4 py-2 rounded-xl border border-primario/20 dark:border-slate-600 text-sm font-medium hover:bg-claro dark:hover:bg-slate-700 text-primario dark:text-slate-300 outline-none focus-visible:ring-2 focus-visible:ring-primario transition-colors">Concluídas</button>
+            <button data-filtro="fixados" class="filter-btn px-4 py-2 rounded-xl border border-primario/20 dark:border-slate-600 text-sm font-medium hover:bg-claro dark:hover:bg-slate-700 text-primario dark:text-slate-300 outline-none focus-visible:ring-2 focus-visible:ring-primario transition-colors">Lembretes Fixados</button>
+          </div>
+
+          <div class="flex flex-col md:flex-row gap-3">
+            <div class="relative flex-1">
+              <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-primario/60 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              <input type="search" placeholder="Buscar por palavra-chave…" class="w-full pl-10 pr-3 py-2.5 rounded-xl border border-primario/20 dark:border-slate-600 bg-white dark:bg-slate-900 text-primario dark:text-white focus:outline-none focus:ring-2 focus:ring-primario transition-colors" />
+            </div>
+            <select class="px-3 py-2.5 rounded-xl border border-primario/20 dark:border-slate-600 bg-white dark:bg-slate-900 text-primario dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-primario transition-colors cursor-pointer">
+              <option value="prazo">Prazo mais próximo</option>
+              <option value="cadastro">Data de cadastro</option>
+              <option value="origem">Origem (Professor vs Autoestudo)</option>
+            </select>
+          </div>
+
+          <div class="flex flex-wrap gap-2 pt-1 border-t border-primario/10 dark:border-slate-700">
+            <button class="mt-3 flex items-center gap-2 bg-primario dark:bg-indigo-600 hover:opacity-90 text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-opacity outline-none focus-visible:ring-2 focus-visible:ring-primario focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg> 
+              Nova Atividade Prática
+            </button>
+            <button class="mt-3 flex items-center gap-2 bg-marinho dark:bg-indigo-500 hover:opacity-90 text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-opacity outline-none focus-visible:ring-2 focus-visible:ring-primario focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> 
+              Novo Trabalho em Grupo
+            </button>
+            <button class="mt-3 flex items-center gap-2 bg-claro dark:bg-slate-700/50 hover:bg-primario/10 dark:hover:bg-slate-700 text-marinho dark:text-indigo-300 text-sm font-semibold px-4 py-2.5 rounded-xl border border-primario/30 dark:border-slate-600 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primario focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.73 21a2 2 0 0 1-3.46 0"/><path d="M18.63 13A17.89 17.89 0 0 1 18 8"/><path d="M6.26 6.26A5.86 5.86 0 0 0 6 8c0 7-3 9-3 9h14"/><path d="M18 8a6 6 0 0 0-9.33-5"/><line x1="1" x2="3" y1="1" y2="3"/><line x1="21" x2="23" y1="21" y2="23"/></svg> 
+              Novo Lembrete
+            </button>
+          </div>
+        </div>
+
+        <!-- Grid de Itens -->
+        <section aria-labelledby="titulo-secao-atividades">
+          <header class="flex flex-wrap items-center justify-between gap-3 mb-5">
+            <div class="flex items-center gap-3">
+              <span class="grid place-items-center w-10 h-10 rounded-xl bg-claro dark:bg-slate-800 text-primario dark:text-indigo-400">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>
+              </span>
+              <div>
+                <h2 id="titulo-secao-atividades" class="text-lg font-semibold text-marinho dark:text-white flex items-center gap-2">
+                  Atividades Individuais
+                  <span class="text-xs font-semibold bg-claro dark:bg-slate-800 text-primario dark:text-indigo-300 rounded-full px-2 py-0.5">2</span>
+                </h2>
+                <p class="text-sm text-primario/80 dark:text-slate-400">Listas de exercícios, leituras e pesquisas</p>
+              </div>
+            </div>
+          </header>
+          
+          <div class="grid grid-cols-1 xl:grid-cols-2 gap-5">
+            <article class="item-card group bg-white dark:bg-slate-800 rounded-2xl border border-primario/20 dark:border-slate-700 shadow-sm p-6 flex flex-col gap-4 relative overflow-hidden">
+              <div class="absolute left-0 top-0 bottom-0 w-1 bg-primario dark:bg-indigo-500 rounded-l-2xl"></div>
+              <header class="flex items-start justify-between gap-3">
+                <div>
+                  <div class="flex flex-wrap items-center gap-2 mb-2">
+                    <span class="text-[11px] font-semibold uppercase tracking-wide bg-claro dark:bg-slate-700/50 text-marinho dark:text-indigo-300 rounded-md px-2 py-1">Prática</span>
+                    <span class="text-[11px] font-bold uppercase tracking-wide bg-marinho dark:bg-indigo-500 text-white rounded-md px-2 py-1">Professor</span>
+                  </div>
+                  <h3 class="font-bold text-lg text-marinho dark:text-white leading-snug">Lista de exercícios – Herança e Polimorfismo</h3>
+                </div>
+                <button class="opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity p-2 rounded-lg hover:bg-claro dark:hover:bg-slate-700 text-primario/60 dark:text-slate-400 outline-none focus-visible:ring-2 focus-visible:ring-primario">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+                </button>
+              </header>
+              <p class="text-sm text-primario/80 dark:text-slate-300 leading-relaxed">Implementar a hierarquia de classes do enunciado usando classes abstratas e métodos polimórficos.</p>
+              <div class="flex flex-wrap items-center gap-3 text-sm border-b border-primario/10 dark:border-slate-700 pb-4">
+                <span class="flex items-center gap-1.5 font-medium text-primario dark:text-indigo-300"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg> Prazo: 08/11/2026</span>
+                <span class="text-xs font-semibold bg-primario/10 dark:bg-indigo-500/20 text-primario dark:text-indigo-300 rounded-full px-2.5 py-1">3 dias restantes</span>
+              </div>
+              <details class="group/details" open>
+                <summary class="text-xs font-semibold uppercase tracking-wide text-primario/60 dark:text-slate-400 mb-2 cursor-pointer list-none flex justify-between items-center outline-none focus-visible:ring-2 focus-visible:ring-primario rounded p-1 -ml-1 hover:text-primario dark:hover:text-indigo-400 transition-colors">
+                  Checklist (2/4)
+                  <svg class="w-4 h-4 transform group-open/details:rotate-180 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </summary>
+                <ul class="space-y-2 mt-2">
+                  <li>
+                    <label class="flex items-center gap-3 text-sm cursor-pointer group/item">
+                      <input type="checkbox" checked class="peer w-4.5 h-4.5 accent-primario dark:accent-indigo-500 rounded border-primario/30 dark:border-slate-600 focus-visible:ring-2 focus-visible:ring-primario focus-visible:ring-offset-1" />
+                      <span class="font-medium text-primario/90 dark:text-slate-300 peer-checked:line-through peer-checked:text-primario/40 dark:peer-checked:text-slate-500 transition-all duration-200">Criar classe abstrata Funcionario</span>
+                    </label>
+                  </li>
+                  <li>
+                    <label class="flex items-center gap-3 text-sm cursor-pointer group/item">
+                      <input type="checkbox" checked class="peer w-4.5 h-4.5 accent-primario dark:accent-indigo-500 rounded border-primario/30 dark:border-slate-600 focus-visible:ring-2 focus-visible:ring-primario focus-visible:ring-offset-1" />
+                      <span class="font-medium text-primario/90 dark:text-slate-300 peer-checked:line-through peer-checked:text-primario/40 dark:peer-checked:text-slate-500 transition-all duration-200">Implementar subclasses</span>
+                    </label>
+                  </li>
+                  <li>
+                    <label class="flex items-center gap-3 text-sm cursor-pointer group/item">
+                      <input type="checkbox" class="peer w-4.5 h-4.5 accent-primario dark:accent-indigo-500 rounded border-primario/30 dark:border-slate-600 focus-visible:ring-2 focus-visible:ring-primario focus-visible:ring-offset-1" />
+                      <span class="font-medium text-primario/90 dark:text-slate-300 peer-checked:line-through peer-checked:text-primario/40 dark:peer-checked:text-slate-500 transition-all duration-200">Coleção polimórfica</span>
+                    </label>
+                  </li>
+                </ul>
+              </details>
+              <footer class="mt-auto pt-4 flex flex-wrap items-center justify-between gap-3">
+                <a href="#" class="flex items-center gap-1.5 text-sm font-semibold text-primario/70 dark:text-slate-400 hover:text-primario dark:hover:text-indigo-400 transition-colors focus-visible:ring-2 focus-visible:ring-primario outline-none rounded">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Link (GitHub)
+                </a>
+                <button class="flex items-center gap-1.5 text-sm font-semibold bg-claro dark:bg-slate-700/50 group-hover:bg-primario dark:group-hover:bg-indigo-600 text-primario dark:text-indigo-300 group-hover:text-white transition-colors duration-300 px-4 py-2 rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-primario focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  Marcar como concluída
+                </button>
+              </footer>
+            </article>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <!-- Script da interface (Agora apontando direto para a pasta ui) -->
+  <script type="module" src="ui/ui.ts"></script>
+</body>
+</html>

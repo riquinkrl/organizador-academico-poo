@@ -1,0 +1,76 @@
+/* Flow Academy — estilos customizados (complementam o Tailwind CSS) */
+
+/* Estilização da Scrollbar Customizada */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(0, 1, 232, 0.2); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(0, 1, 232, 0.4); }
+.dark ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); }
+
+/* Tooltip em CSS Puro */
+.tooltip-css { position: relative; cursor: help; }
+.tooltip-css::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 125%; left: 50%;
+  transform: translateX(-50%);
+  background-color: #0001E8; color: white;
+  padding: 4px 8px; border-radius: 6px;
+  font-size: 11px; font-weight: 600; white-space: nowrap;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+  z-index: 50;
+}
+.dark .tooltip-css::after { background-color: #312e81; }
+.tooltip-css:hover::after { opacity: 1; transform: translateX(-50%) translateY(-4px); }
+
+/* Estados de Navegação e Cards */
+.nav-link.active { background-color: rgba(0,1,232,.08); color: #0001E8; font-weight: 600; }
+.dark .nav-link.active { background-color: rgba(99, 102, 241, 0.15); color: #818cf8; }
+
+.filter-btn.active { background-color: #0001E8; color: #fff; border-color: #0001E8; }
+.dark .filter-btn.active { background-color: #4f46e5; border-color: #4f46e5; color: #ffffff; }
+
+.item-card { transition: box-shadow .2s, transform .2s; }
+.item-card:hover { box-shadow: 0 8px 20px -8px rgba(0,1,232,.25); transform: translateY(-2px); }
+.dark .item-card:hover { box-shadow: 0 8px 20px -8px rgba(0,0,0,.5); }
+
+.pin-btn[aria-pressed="true"] { color: #0001E8; background: rgba(0,1,232,.08); }
+.pin-btn[aria-pressed="true"] svg { fill: #0001E8; }
+.dark .pin-btn[aria-pressed="true"] { color: #818cf8; background: rgba(99, 102, 241, 0.15); }
+.dark .pin-btn[aria-pressed="true"] svg { fill: #818cf8; }
+
+/* Correção visual do Details/Summary */
+summary::-webkit-details-marker { display: none; }
+
+/* Animações (Lucide Animated via CSS) */
+.metric-icon .ai { overflow: visible; }
+.metric-icon .ai * { transform-box: view-box; }
+.ai-check .ai-draw { stroke-dasharray: 1; stroke-dashoffset: 0; }
+.ai-clock .ai-min, .ai-clock .ai-hour { transform-origin: 12px 12px; }
+.ai-alert .ai-tri { transform-origin: 12px 20px; }
+.ai-alert .ai-dot { transform-origin: 12px 17px; }
+.ai-bell .ai-bell-body { transform-origin: 12px 3px; }
+
+.metric-card:hover .ai-check circle, .metric-card.is-animating .ai-check circle { transform-origin: 12px 12px; animation: ai-pop .6s ease-out; }
+.metric-card:hover .ai-check .ai-draw, .metric-card.is-animating .ai-check .ai-draw { animation: ai-draw .7s ease-out; }
+.metric-card:hover .ai-clock .ai-min , .metric-card.is-animating .ai-clock .ai-min  { animation: ai-spin 1s ease-in-out; }
+.metric-card:hover .ai-clock .ai-hour, .metric-card.is-animating .ai-clock .ai-hour { animation: ai-spin-slow 1s ease-in-out; }
+.metric-card:hover .ai-alert .ai-tri, .metric-card.is-animating .ai-alert .ai-tri { animation: ai-shake .8s ease-in-out; }
+.metric-card:hover .ai-alert .ai-dot, .metric-card.is-animating .ai-alert .ai-dot { animation: ai-blink .8s ease-in-out; }
+.metric-card:hover .ai-bell .ai-bell-body, .metric-card.is-animating .ai-bell .ai-bell-body { animation: ai-swing 1s ease-in-out; }
+.metric-card:hover .ai-bell .ai-clapper, .metric-card.is-animating .ai-bell .ai-clapper { animation: ai-clap 1s ease-in-out; }
+
+@keyframes ai-draw  { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes ai-pop   { 0% { transform: scale(.82); } 60% { transform: scale(1.08); } 100% { transform: scale(1); } }
+@keyframes ai-spin  { to { transform: rotate(360deg); } }
+@keyframes ai-spin-slow { to { transform: rotate(60deg); } }
+@keyframes ai-shake { 0%,100% { transform: rotate(0); } 20% { transform: rotate(-9deg); } 40% { transform: rotate(8deg); } 60% { transform: rotate(-5deg); } 80% { transform: rotate(3deg); } }
+@keyframes ai-blink { 0%,100% { opacity: 1; } 40% { opacity: .15; } 70% { opacity: 1; } }
+@keyframes ai-swing { 0%,100% { transform: rotate(0); } 20% { transform: rotate(14deg); } 40% { transform: rotate(-12deg); } 60% { transform: rotate(8deg); } 80% { transform: rotate(-4deg); } }
+@keyframes ai-clap  { 0%,100% { transform: translateX(0); } 25% { transform: translateX(2px); } 50% { transform: translateX(-2px); } 75% { transform: translateX(1px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .metric-card.is-animating .ai *, .metric-card:hover .ai * { animation: none !important; }
+}

@@ -1,5 +1,5 @@
 import { ItemAcademico } from "./item-academico";
-import type { AcoesLembrete } from "../contratos/acoes-lembrete";
+import type { AcoesLembrete } from "../contratos/acoes-lembre";
 
 export class Lembrete extends ItemAcademico implements AcoesLembrete {
     private readonly dataAviso?: Date;

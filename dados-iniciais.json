@@ -1,0 +1,11 @@
+{
+    "nome": "Estudante de exemplo",
+    "workspaces": [
+        {
+            "codigo": "POO0001",
+            "nome": "Programação Orientada a Objetos",
+            "professor": "Iallen Gábio",
+            "itens": []
+        }
+    ]
+}

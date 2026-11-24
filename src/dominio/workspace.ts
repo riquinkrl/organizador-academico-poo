@@ -17,9 +17,17 @@ export class Workspace implements AcoesWorkspace {
         if (nome.trim() === ""){
             throw new Error ("O nome do workspace não pode ser vazio.")
         }
+        this.codigo = codigo.trim().toUpperCase();
+        this.nome = nome.trim();
     }
 
     adicionarItem(item: AcoesItemAcademico): void {
+        if(item.getWorkspaceId() !== this.codigo){
+            throw new Error ("O item pertence a outra disciplina.");
+        }
+        if (this.buscarItem(item.getId()) !== undefined){
+            throw new Error ("Já existe um item com este identificador.");
+        }
         this.itens.push(item);
     }
 

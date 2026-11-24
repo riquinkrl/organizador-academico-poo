@@ -59,6 +59,8 @@ ws.adicionarItem(material);
 
 verificar("listarItens tem 4 itens", ws.listarItens().length === 4);
 verificar("buscarItem encontra pelo id", ws.buscarItem(lista.getId()) === lista);
+verificar("adicionar item com id repetido lança erro", lancaErro(() => ws.adicionarItem(lista)));
+verificar("a lista continua com 4 itens", ws.listarItens().length === 4);
 verificar("totalDeAtividades conta só quem exige entrega (2)", ws.totalDeAtividades() === 2);
 verificar("3 pendentes (lista, seminário e lembrete com aviso futuro)", ws.listarPendentes().length === 3);
 verificar("nenhum atrasado hoje", ws.listarAtrasados().length === 0);

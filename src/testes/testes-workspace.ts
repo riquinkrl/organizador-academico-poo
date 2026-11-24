@@ -5,6 +5,9 @@ import { Lembrete } from "../dominio/lembrete";
 
 function verificar(descricao: string, condicao: boolean): void {
     console.log(`${condicao ? "OK    " : "FALHOU"} - ${descricao}`);
+    if(!condicao){
+        throw new Error(`Teste falhou: ${descricao}`);
+    }
 }
 
 function lancaErro(acao: () => void): boolean {

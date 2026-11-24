@@ -28,6 +28,10 @@ const em10Dias = new Date(Date.now() + 10 * DIA);
 console.log("\n--- Invariantes ---");
 verificar("código vazio lança erro", lancaErro(() => new Workspace("", "POO", "Prof")));
 verificar("nome só com espaços lança erro", lancaErro(() => new Workspace("ADS1", "   ", "Prof")));
+const minusculo = new Workspace(" ads0304 ", "POO", "Prof");
+verificar("código é guardado sem espaços e em maiúsculas", minusculo.codigo === "ADS0304");
+minusculo.adicionarItem(new Lembrete("Aviso", "Teste", "ads0304", "Aviso"));
+verificar("item da mesma diciplina é aceito mesmo com caixa diferente", minusculo.listarItens().length === 1);
 
 // 2. Workspace vazio
 console.log("\n--- Workspace vazio ---");
@@ -59,8 +63,7 @@ ws.adicionarItem(material);
 
 verificar("listarItens tem 4 itens", ws.listarItens().length === 4);
 verificar("buscarItem encontra pelo id", ws.buscarItem(lista.getId()) === lista);
-verificar("adicionar item com id repetido lança erro", lancaErro(() => ws.adicionarItem(lista)));
-verificar("a lista continua com 4 itens", ws.listarItens().length === 4);
+
 verificar("totalDeAtividades conta só quem exige entrega (2)", ws.totalDeAtividades() === 2);
 verificar("3 pendentes (lista, seminário e lembrete com aviso futuro)", ws.listarPendentes().length === 3);
 verificar("nenhum atrasado hoje", ws.listarAtrasados().length === 0);
@@ -70,7 +73,10 @@ verificar("2 atrasados daqui a 10 dias", ws.listarAtrasados(em10Dias).length ===
 console.log("\n--- Filtros, ordenação e busca ---");
 verificar("1 lembrete fixado", ws.listarLembretesFixados().length === 1);
 verificar("o fixado é a prova", ws.listarLembretesFixados()[0] === prova);
-
+verificar("recusa item de outra disciplina",
+    lancaErro(() => ws.adicionarItem(new Lembrete("Aviso de BD", "Outra matéria", "BD0101", "Aviso"))));
+verificar("recusa item com id repetido", lancaErro(() => ws.adicionarItem(lista)));
+verificar("a lista continua com 4 itens", ws.listarItens().length === 4);
 const porPrazo = ws.ordenarPorPrazo();
 verificar("ordenarPorPrazo ignora quem não tem prazo (2 itens)", porPrazo.length === 2);
 verificar("prazo mais próximo primeiro (lista)", porPrazo[0] === lista);

@@ -1,5 +1,5 @@
 import type { AcoesTrabalhoEmGrupo, EtapaTrabalho } from "../contratos/acoes-trabalho-grupo";
-import type { Origem, Passo } from "../contratos/tipos";
+import type { Origem, Passo, RegistroItemAcademico } from "../contratos/tipos";
 import { AtividadePratica } from "./atividade-academico";
 import { textoObrigatorio } from "./validacao";
 
@@ -7,6 +7,7 @@ export class TrabalhoEmGrupo extends AtividadePratica implements AcoesTrabalhoEm
     private readonly colegasDeEquipe: Array<string> = [];
     private readonly papelDoAluno: string;
     private readonly etapas: Array<EtapaTrabalho> = [];
+
 
     constructor(
         titulo: string,
@@ -18,8 +19,10 @@ export class TrabalhoEmGrupo extends AtividadePratica implements AcoesTrabalhoEm
         origem: Origem = "PROFESSOR",
         checklist?: Array<Passo>,
         linkEntrega?: string,
+        registro?: RegistroItemAcademico
     ) {
-        super(titulo, descricao, workspaceId, dataLimite, origem, checklist, linkEntrega);
+        super(titulo, descricao, workspaceId, dataLimite, origem, checklist, linkEntrega, registro);
+
         this.papelDoAluno = textoObrigatorio(papelDoAluno, "o papel do aluno");
 
         if (colegasDeEquipe !== undefined) {
@@ -28,6 +31,7 @@ export class TrabalhoEmGrupo extends AtividadePratica implements AcoesTrabalhoEm
             }
         }
     }
+
 
     override obterCategoria(): string {
         return "Trabalho em Grupo";

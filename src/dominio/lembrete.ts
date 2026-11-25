@@ -1,11 +1,13 @@
 import { ItemAcademico } from "./item-academico";
 import type { AcoesLembrete } from "../contratos/acoes-lembre";
 import { textoObrigatorio, dataValida } from "./validacao";
+import type { RegistroItemAcademico } from "../contratos/tipos";
 
 export class Lembrete extends ItemAcademico implements AcoesLembrete {
     private readonly dataAviso?: Date;
     private fixado: boolean;
     private readonly etiqueta: string;
+
 
     constructor(
         titulo: string,
@@ -13,14 +15,16 @@ export class Lembrete extends ItemAcademico implements AcoesLembrete {
         workspaceId: string,
         etiqueta: string,
         dataAviso?: Date,
-        fixado: boolean = false
+        fixado: boolean = false,
+        registro?: RegistroItemAcademico
     ) {
-        super(titulo, descricao, workspaceId);
+        super(titulo, descricao, workspaceId, registro);
 
         this.etiqueta = textoObrigatorio(etiqueta, "a etiqueta");
         this.dataAviso = Lembrete.validarDataAviso(dataAviso);
         this.fixado = fixado;
     }
+
 
     private static validarDataAviso(data?: Date): Date | undefined {
         if (data === undefined) {

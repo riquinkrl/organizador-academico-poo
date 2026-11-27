@@ -10,4 +10,9 @@ export interface AcoesWorkspace {
     listarAtrasados(agora?: Date): Array<AcoesItemAcademico>;
     totalDeAtividades(): number;
     taxaDeConclusao(): number; 
+    listarLembretesFixados(): Array<AcoesItemAcademico>;
+    ordenarPorPrazo(): Array<AcoesItemAcademico>;
+    ordenarPorDataCadastro(): Array<AcoesItemAcademico>;
+    ordenarPorOrigem(): Array<AcoesItemAcademico>;
+    buscarPorTexto(termo:string): Array<AcoesItemAcademico>;
 }
